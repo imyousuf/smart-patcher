@@ -19,7 +19,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-import poplib, email, re, sys, xmlConfigs;
+import poplib, email, re, sys, xmlConfigs, utils;
 
 class ReferenceNode :
     def __init__(self, node, emailMessage, references=list(), children=dict(), slotted=bool("false")):
@@ -61,28 +61,36 @@ def makeChildren(patchMessageReferenceNode) :
     ref_keys.sort()
     for messageId in ref_keys:
         referenceNode = patchMessageReferenceNode[messageId]
-        print "Managing Message Id:", referenceNode.get_node()
+        utils.verboseOutput(verbose, "Managing Message Id:", referenceNode.get_node())
         referenceIds = referenceNode.get_references()
         referenceIdsClone = referenceIds[:]
-        print "Cloned References: ", referenceIdsClone
+        utils.verboseOutput(verbose, "Cloned References: ", referenceIdsClone)
         if len(referenceIds) > 0 :
             nextNode = patchMessageReferenceNode[referenceIdsClone[0]]
             referenceIdsClone.remove(referenceIdsClone[0])
             while nextNode != None :
-                print "Next Node: ", nextNode.get_node()
-                print "Curent Node: ", referenceNode.get_node()
-                print "REF: ", referenceIdsClone
+                utils.verboseOutput(verbose, "Next Node: ", nextNode.get_node())
+                utils.verboseOutput(verbose, "Curent Node: ", referenceNode.get_node())
+                utils.verboseOutput(verbose, "REF: ", referenceIdsClone)
                 nextNode = handleNode(referenceNode, nextNode, referenceIdsClone, patchMessageReferenceNode)
 
 if __name__ == "__main__":
-    print "Checking POP3 for gmail"
+    arguments = sys.argv
+    verbose = "false"
+    pseudoArgs = arguments[:]
+    while len(pseudoArgs) > 1 :
+        argument = pseudoArgs[1]
+        if argument == "-v" or argument == "--verbose" :
+            verbose = "true"
+        pseudoArgs.remove(argument)
+    utils.verboseOutput(verbose, "Checking POP3 for gmail")
     try:
         emailConfig = xmlConfigs.initializePopConfig("./email-configuration.xml")
         myPop = emailConfig.get_pop3_connection()
         numMessages = len(myPop.list()[1])
         patchMessages = dict()
         for i in range(numMessages):
-            print "Index: ", i
+            utils.verboseOutput(verbose, "Index: ", i)
             totalContent = ""
             for content in myPop.retr(i+1)[1]:
                 totalContent += content + '\n'
@@ -91,7 +99,7 @@ if __name__ == "__main__":
                 subject = msg['subject']
                 subjectPattern = "^\[.*PATCH.*\].+"
                 subjectMatch = re.match(subjectPattern, subject)
-                print "Checking subject: ", subject
+                utils.verboseOutput(verbose, "Checking subject: ", subject)
                 if subjectMatch == None :
                     continue
             else :
@@ -99,19 +107,19 @@ if __name__ == "__main__":
             messageId = ""
             if 'message-id' in msg:
                 messageId = re.search("<(.*)>", msg['message-id']).group(1)
-                print 'Message-ID:', messageId
+                utils.verboseOutput(verbose, 'Message-ID:', messageId)
             referenceIds = []
             if 'references' in msg:
                 references = msg['references']
                 referenceIds = re.findall("<(.*)>", references)
-            print "References: ", referenceIds
+            utils.verboseOutput(verbose, "References: ", referenceIds)
             currentNode = ReferenceNode(messageId, msg, referenceIds)
             patchMessages[messageId] = currentNode
             currentNode.set_slotted(bool("false"))
-        print "**************Make Children**************"
+        utils.verboseOutput(verbose, "**************Make Children**************")
         makeChildren(patchMessages)
-        print "--------------RESULT--------------"
-        print patchMessages
+        utils.verboseOutput(verbose, "--------------RESULT--------------")
+        utils.verboseOutput(verbose, patchMessages)
     except:
-        print "Error: ", sys.exc_info()
+        utils.verboseOutput(verbose, "Error: ", sys.exc_info())
 
