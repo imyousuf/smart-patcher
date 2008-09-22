@@ -1,0 +1,15 @@
+I started this project in order to be able to manage patch emails. I did not
+want to have to manage them manually but rather wanted it to be as much
+automated as it could be. Thus started this project.
+
+What it is intended to do is - POP emails, check for PATCH mails, make a chain
+out of the patches (currently depending on REFERENCES header added by git's
+send-email), find the spring point of the series, make a new branch amend the
+patches and send the maintainer a summary report notifying about the amends.
+Maintainer then should be able to send emails to the patch manager notifying it
+to rename, merge, delete, push them. Plus the manager will have feature of
+deleting a branch that the maintainer never worked on after its inception for a
+specified time period.
+
+We are open to suggestions and feature requests. The project is licensed under
+GPL v3.
