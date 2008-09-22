@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<patch-manager>
+	<pop-mail-config>
+		<email>some-patch@smartitengineering.com</email>
+		<ssl>true</ssl>
+		<pop-server>pop.gmail.com</pop-server>
+                <pop-port>9996</pop-port>
+		<username>some-patch@smartitengineering.com</username>
+		<password>accountsecret</password>
+	</pop-mail-config>
+</patch-manager>
