@@ -3,3 +3,15 @@ the project.
 
 In order to contribute please check the LICENSE.txt and source code header for
 more information.
+
+-- Add verbose argument to the command and convert the prints to verbose
+-- Create meta-branches and their respective boxes with the emails and meta info
+-- Apply the patches to branches and maintain meta info for branches and send
+    summary email to maintainer. Summary should mention whether branch point is
+    master or not
+-- Receive command mail for branch rename, update branch name and update meta
+    info, which should contain branch name history. Should *RE* with
+    success/failure messages
+-- Receive command mail for deleting branches (similar to rename)
+-- Receive command mail for merging branches (similar to rename)
+-- Receive command mail for pushing branch ref specs (similar to rename)
