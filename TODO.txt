@@ -1,0 +1,5 @@
+This file will contain the works to be done so that any one can contribute to
+the project.
+
+In order to contribute please check the LICENSE.txt and source code header for
+more information.
