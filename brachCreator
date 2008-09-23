@@ -1,0 +1,15 @@
+#!/bin/sh
+if test $# -lt 2
+then
+	echo USAGE: brachCreator newBranchName treeId
+fi
+commitIds=$(git log "--pretty=format:%T --- %H" | grep "$1" | sed -ne 's/\(.*\) --- \(.*\)/\2/p')
+commitId=""
+for id in $commitIds
+do
+	if test -z $commitId
+	then
+		commitId=$id
+	fi 
+done
+git checkout -b "$2" "$commitId"

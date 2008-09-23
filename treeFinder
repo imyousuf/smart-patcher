@@ -1,0 +1,25 @@
+#!/bin/sh
+if test -z "$1"
+then
+	echo USAGE: treeFinder patch-file-path
+	exit
+fi
+treeHashs=$(git log --pretty=format:%T)
+commitTreeId=""
+for shortObjectId in $(cat $1 | grep 'index ' | sed -ne 's/index \(.*\)\.\.\(.*\) .*/\1/p')
+do
+	objectId=$(git rev-list --objects $shortObjectId)
+	for treeId in $treeHashs
+	do
+		output=$(git ls-tree -r -l $treeId | grep $objectId)
+		if test -z "$commitTreeId" && test -n "$output" 
+		then
+			commitTreeId=$treeId
+		fi
+	done
+done
+if test -z "$commitTreeId"
+then
+	commitTreeId=$(git log -n1 --pretty=format:%T)
+fi
+echo $commitTreeId
