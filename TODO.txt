@@ -9,9 +9,17 @@ more information.
 -- Apply the patches to branches and maintain meta info for branches and send
     summary email to maintainer. Summary should mention whether branch point is
     master or not
+-- Introduce MAKE based build system to install from source and make 'deb'
+    package
+--* Release version 0.1 (October 2008)
 -- Receive command mail for branch rename, update branch name and update meta
     info, which should contain branch name history. Should *RE* with
     success/failure messages
+-- Auto delete branches once a configured period has expired and thus end status
+    email.
+--* Release version 0.2 (October/November 2008)
 -- Receive command mail for deleting branches (similar to rename)
 -- Receive command mail for merging branches (similar to rename)
 -- Receive command mail for pushing branch ref specs (similar to rename)
+--* Release version 0.3 (January/February 2009)
+
